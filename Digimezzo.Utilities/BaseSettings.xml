@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <!-- 
+  Your application needs a BaseSettings.xml file which contains at least this "Configuration" namespace.
+  You can add as many other namespaces and settings as you wish.
+  -->
+  <Namespace Name="Configuration">
+    <Setting Name="Version">
+      <Value>0</Value>
+    </Setting>
+    <Setting Name="IsPortable">
+      <Value>False</Value>
+    </Setting>
+  </Namespace>
+</Settings>

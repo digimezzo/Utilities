@@ -1,55 +1,41 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Digimezzo.Utilities.IO
+namespace Digimezzo.Utilities.Utils
 {
-    public class FileInformation
+    public static class FileUtils
     {
-        #region Variables
-        private string path;
-        #endregion
-
-        #region Construction
-        public FileInformation(string path)
+        public static string Folder(string path)
         {
-            this.path = path;
-        }
-        #endregion
-
-        #region Readonly Properties
-        public string Folder
-        {
-            get { return System.IO.Path.GetDirectoryName(this.path); }
+            return System.IO.Path.GetDirectoryName(path);
         }
 
-        public string Name
+        public static string Name(string path)
         {
-            get { return System.IO.Path.GetFileName(this.path); }
+            return System.IO.Path.GetFileName(path);
         }
 
-        public string NameWithoutExtension
+        public static string NameWithoutExtension(string path)
         {
-            get { return System.IO.Path.GetFileNameWithoutExtension(this.path); }
+            return System.IO.Path.GetFileNameWithoutExtension(path);
         }
 
-        public long SizeInBytes
+        public static long SizeInBytes(string path)
         {
-            get { return new System.IO.FileInfo(this.path).Length; }
+            return new System.IO.FileInfo(path).Length;
         }
 
-        public DateTime DateModified
+        public static DateTime DateModified(string path)
         {
-            get { return new System.IO.FileInfo(this.path).LastWriteTime; }
+            return new System.IO.FileInfo(path).LastWriteTime;
         }
 
-        public long DateModifiedTicks
+        public static long DateModifiedTicks(string path)
         {
-            get { return new System.IO.FileInfo(this.path).LastWriteTime.Ticks; }
+            return new System.IO.FileInfo(path).LastWriteTime.Ticks;
         }
-        #endregion
 
-        #region Static
-        public bool IsPathTooLong(string path)
+        public static bool IsPathTooLong(string path)
         {
             // The fully qualified file name must be less than 260 characters, 
             // and the directory name must be less than 248 characters. This 
@@ -67,7 +53,6 @@ namespace Digimezzo.Utilities.IO
 
         public static string SanitizeFilename(string filename)
         {
-
             string retVal = string.Empty;
             string replaceStr = string.Empty;
 
@@ -84,6 +69,5 @@ namespace Digimezzo.Utilities.IO
 
             return retVal;
         }
-        #endregion
     }
 }

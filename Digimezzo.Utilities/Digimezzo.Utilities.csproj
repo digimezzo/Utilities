@@ -59,8 +59,6 @@
     <Compile Include="Helpers\NameValue.cs" />
     <Compile Include="Helpers\OperationResult.cs" />
     <Compile Include="IO\Actions.cs" />
-    <Compile Include="IO\FileInformation.cs" />
-    <Compile Include="IO\ImageOperations.cs" />
     <Compile Include="IO\ProcessExecutable.cs" />
     <Compile Include="IO\LegacyPaths.cs" />
     <Compile Include="Log\LogClient.cs" />
@@ -84,6 +82,8 @@
     <Compile Include="Utils\CryptographyUtils.cs" />
     <Compile Include="Utils\DateTimeUtils.cs" />
     <Compile Include="Utils\EnvironmentUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Utils\ResourceUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\VisualTreeUtils.cs" />

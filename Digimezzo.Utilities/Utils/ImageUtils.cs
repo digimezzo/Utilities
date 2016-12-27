@@ -4,9 +4,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace Digimezzo.Utilities.IO
+namespace Digimezzo.Utilities.Utils
 {
-    public static class ImageOperations
+    public static class ImageUtils
     {
         public static byte[] Image2GrayScaleByteArray(string filename)
         {

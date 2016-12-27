@@ -48,6 +48,30 @@ namespace Digimezzo.Utilities.Utils
             NativeMethods.SendMessage(windowHandle, WM_NCLBUTTONDOWN, HT_CAPTION, lParam);
         }
 
+        public static void CenterWindow(Window win)
+        {
+            // This is a hack to get the Dialog to center on the application's main window
+            try
+            {
+                if (Application.Current.MainWindow.IsVisible)
+                {
+                    win.Owner = Application.Current.MainWindow;
+                    win.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                }
+                else
+                {
+                    // If the main window is not visible (like when the OOBE screen is visible),
+                    // center the Dialog on the screen
+                    win.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
+            }
+            catch (Exception)
+            {
+                // The try catch should not be necessary. But added just in case.
+                win.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+        }
+
         /// <summary>
         /// Hides the given window from the Windows ALT-TAB menu. Must be called AFTER the window is shown. 
         /// It doesn't work when called from the window's constructor. Instead, overload the Show() 
@@ -55,7 +79,6 @@ namespace Digimezzo.Utilities.Utils
         /// </summary>
         /// <param name="win"></param>
         /// <remarks></remarks>
-
         public static void HideWindowFromAltTab(Window win)
         {
             WindowInteropHelper wndHelper = new WindowInteropHelper(win);

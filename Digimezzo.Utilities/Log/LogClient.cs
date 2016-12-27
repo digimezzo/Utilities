@@ -235,6 +235,16 @@ namespace Digimezzo.Utilities.Log
             LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6));
         }
 
+        public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
+        {
+            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+        }
+
+        public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        {
+            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+        }
+
         public static void Warning(string message)
         {
             LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), message);
@@ -270,6 +280,16 @@ namespace Digimezzo.Utilities.Log
             LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6));
         }
 
+        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
+        {
+            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+        }
+
+        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        {
+            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+        }
+
         public static void Error(string message)
         {
             LogClient.Instance.AddLogEntry("Error", new StackFrame(1), message);
@@ -303,6 +323,16 @@ namespace Digimezzo.Utilities.Log
         public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
         {
             LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6));
+        }
+
+        public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
+        {
+            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+        }
+
+        public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        {
+            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
         }
         #endregion
     }

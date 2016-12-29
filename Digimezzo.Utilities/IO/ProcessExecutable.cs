@@ -1,4 +1,7 @@
-﻿namespace Digimezzo.Utilities.IO
+﻿using System;
+using System.Reflection;
+
+namespace Digimezzo.Utilities.IO
 {
     public static class ProcessExecutable
     {
@@ -17,7 +20,20 @@
         /// <returns></returns>
         public static string Name()
         {
-            return System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
+            return Assembly.GetEntryAssembly().GetName().Name;
         }
+
+        /// <summary>
+        /// Get the assembly version of the process executable
+        /// </summary>
+        /// <returns></returns>
+        public static Version AssemblyVersion()
+        {
+            Assembly asm = Assembly.GetEntryAssembly();
+            AssemblyName an = asm.GetName();
+
+            return an.Version;
+        }
+
     }
 }

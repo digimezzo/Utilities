@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,6 +58,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\VersionExtensions.cs" />
     <Compile Include="Helpers\NameValue.cs" />
     <Compile Include="Helpers\OperationResult.cs" />
     <Compile Include="IO\Actions.cs" />
@@ -63,6 +66,11 @@
     <Compile Include="IO\LegacyPaths.cs" />
     <Compile Include="Log\LogClient.cs" />
     <Compile Include="Log\LogEntry.cs" />
+    <Compile Include="Packaging\Configuration.cs" />
+    <Compile Include="Packaging\Constants.cs" />
+    <Compile Include="Packaging\ExternalComponent.cs" />
+    <Compile Include="Packaging\Package.cs" />
+    <Compile Include="Packaging\PackageCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

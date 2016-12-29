@@ -11,7 +11,7 @@ namespace Digimezzo.Utilities.IO
         /// <returns></returns>
         public static string ExecutionFolder()
         {
-            return System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            return System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         }
 
         /// <summary>

@@ -183,7 +183,6 @@ namespace Digimezzo.Utilities.Settings
             oldSettings = (from n in this.settingsDoc.Element("Settings").Elements("Namespace")
                            from s in n.Elements("Setting")
                            from v in s.Elements("Value")
-                           where !n.Attribute("Name").Value.ToString().ToLower().Equals("configuration")
                            select new SettingEntry
                            {
                                Namespace = n.Attribute("Name").Value,
@@ -202,7 +201,8 @@ namespace Digimezzo.Utilities.Settings
             {
                 try
                 {
-                    if (SettingExists<string>(item.Namespace, item.Setting))
+                    // Don't migrate configuration settings
+                    if (item.Namespace != "Configuration" && SettingExists<string>(item.Namespace, item.Setting))
                     {
                         // We don't know the type of the setting. So set all settings as String
                         Set<string>(item.Namespace, item.Setting, item.Value);
@@ -352,6 +352,11 @@ namespace Digimezzo.Utilities.Settings
         public static T Get<T>(string settingNamespace, string settingName)
         {
             return SettingsClient.Instance.GetValue<T>(settingNamespace, settingName);
+        }
+
+        public static T BaseGet<T>(string settingNamespace, string settingName)
+        {
+            return SettingsClient.Instance.GetBaseValue<T>(settingNamespace, settingName);
         }
         #endregion
     }

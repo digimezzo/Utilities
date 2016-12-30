@@ -183,7 +183,7 @@ namespace Digimezzo.Utilities.Settings
             oldSettings = (from n in this.settingsDoc.Element("Settings").Elements("Namespace")
                            from s in n.Elements("Setting")
                            from v in s.Elements("Value")
-                           where !n.Attribute("Name").Value.ToString().ToLower().Equals("settings")
+                           where !n.Attribute("Name").Value.ToString().ToLower().Equals("configuration")
                            select new SettingEntry
                            {
                                Namespace = n.Attribute("Name").Value,

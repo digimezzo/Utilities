@@ -11,7 +11,7 @@ namespace Digimezzo.Utilities.Extensions
             //  {2}: Build Number,
             //  {3}: Revision
 
-            if (version.Revision != 0)
+            if (version.Build != 0)
             {
                 return string.Format("{0}.{1}.{2} (Build {3})", version.Major, version.Minor, version.Build, version.Revision);
             }

@@ -76,7 +76,7 @@ namespace Digimezzo.Utilities.Utils
         /// </summary>
         /// <param name="path">Location of directory or file to recycle</param>
         /// <param name="flags">FileOperationFlags to add in addition to FOF_ALLOWUNDO</param>
-        public static bool Send(string path, FileOperationFlags flags)
+        private static bool SendToRecycleBin(string path, FileOperationFlags flags)
         {
             try
             {
@@ -99,18 +99,18 @@ namespace Digimezzo.Utilities.Utils
         /// Send file to recycle bin.  Display dialog, display warning if files are too big to fit (FOF_WANTNUKEWARNING)
         /// </summary>
         /// <param name="path">Location of directory or file to recycle</param>
-        public static bool Send(string path)
+        public static bool SendToRecycleBinInteractive(string path)
         {
-            return Send(path, FileOperationFlags.FOF_NOCONFIRMATION | FileOperationFlags.FOF_WANTNUKEWARNING);
+            return SendToRecycleBin(path, FileOperationFlags.FOF_NOCONFIRMATION | FileOperationFlags.FOF_WANTNUKEWARNING);
         }
 
         /// <summary>
         /// Send file silently to recycle bin. Surpress dialog, surpress errors, delete if too large.
         /// </summary>
         /// <param name="path">Location of directory or file to recycle</param>
-        public static bool MoveToRecycleBin(string path)
+        public static bool SendToRecycleBinSilent(string path)
         {
-            return Send(path, FileOperationFlags.FOF_NOCONFIRMATION | FileOperationFlags.FOF_NOERRORUI | FileOperationFlags.FOF_SILENT);
+            return SendToRecycleBin(path, FileOperationFlags.FOF_NOCONFIRMATION | FileOperationFlags.FOF_NOERRORUI | FileOperationFlags.FOF_SILENT);
         }
     }
 }

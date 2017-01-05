@@ -62,7 +62,13 @@ namespace Digimezzo.Utilities.Packaging
         {
             get
             {
-                return string.Format("{0} {1} {2}", this.name, this.version.ToString(), this.Label);
+                string filename = string.Format("{0} {1}", this.name, this.version.ToString());
+
+                if (this.Configuration == Configuration.Debug)
+                {
+                    filename += " " + Constants.Preview;
+                }
+                return filename;
             }
         }
 

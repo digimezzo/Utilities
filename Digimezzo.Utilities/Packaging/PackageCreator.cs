@@ -1,5 +1,4 @@
-﻿using Digimezzo.Utilities.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -51,7 +50,7 @@ namespace Digimezzo.Utilities.Packaging
             Console.WriteLine("Packager");
             Console.WriteLine("========");
 
-            Console.WriteLine(Environment.NewLine + string.Format("Welcome to the packager for {0} {1}", this.package.Name, this.package.Version.FormatVersion()));
+            Console.WriteLine(Environment.NewLine + string.Format("Welcome to the packager for {0} {1}", this.package.Name, this.package.FormattedVersion));
             Console.WriteLine(Environment.NewLine + "Press any key to start packaging...");
 
             Console.ReadKey();

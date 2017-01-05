@@ -58,7 +58,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\VersionExtensions.cs" />
     <Compile Include="Helpers\NameValue.cs" />
     <Compile Include="Helpers\OperationResult.cs" />
     <Compile Include="IO\Actions.cs" />

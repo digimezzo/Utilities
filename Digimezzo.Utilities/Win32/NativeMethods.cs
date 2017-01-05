@@ -18,6 +18,12 @@ namespace Digimezzo.Utilities.Win32
         [DllImport("user32.dll")]
         static internal extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
 
+        [DllImport("shell32.dll", SetLastError = true)]
+        public static extern IntPtr SHAppBarMessage(ABM dwMessage, [In] ref APPBARDATA pData);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
         /// <summary>
         /// Due to a bug in User32.dll, calling SetWindowLongPtr fails on 32 bit systems. 
         /// This exception occurs: Unable to find an entry point named 'SetWindowLongPtr' in DLL 'user32.dll'

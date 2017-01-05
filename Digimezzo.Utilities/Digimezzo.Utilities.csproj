@@ -102,11 +102,14 @@
     <Compile Include="Win32\AccentPolicy.cs" />
     <Compile Include="Win32\AccentState.cs" />
     <Compile Include="Win32\APPBARDATA.cs" />
-    <Compile Include="Win32\GWL.cs" />
-    <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\Taskbar.cs" />
     <Compile Include="Win32\TaskbarPosition.cs" />
+    <Compile Include="Win32\FileOperationType.cs" />
+    <Compile Include="Win32\FileOperationFlags.cs" />
+    <Compile Include="Win32\SHFILEOPSTRUCT.cs" />
+    <Compile Include="Win32\NativeMethods.cs" />
+    <Compile Include="Win32\GWL.cs" />
     <Compile Include="Win32\WindowCompositionAttribute.cs" />
     <Compile Include="Win32\WindowCompositionAttributeData.cs" />
     <Compile Include="Win32\WS.cs" />

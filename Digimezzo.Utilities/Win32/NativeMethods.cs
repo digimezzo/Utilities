@@ -62,5 +62,8 @@ namespace Digimezzo.Utilities.Win32
                 return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
             }
         }
+
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        public static extern int SHFileOperation(ref SHFILEOPSTRUCT FileOp);
     }
 }

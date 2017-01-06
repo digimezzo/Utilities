@@ -50,7 +50,7 @@ namespace Digimezzo.Utilities.Packaging
             Console.WriteLine("Packager");
             Console.WriteLine("========");
 
-            Console.WriteLine(Environment.NewLine + string.Format("Welcome to the packager for {0} {1}", this.package.Filename, this.package.FormattedVersion));
+            Console.WriteLine(Environment.NewLine + string.Format("Welcome to the packager for {0}", this.package.Filename));
             Console.WriteLine(Environment.NewLine + "Press any key to start packaging...");
 
             Console.ReadKey();

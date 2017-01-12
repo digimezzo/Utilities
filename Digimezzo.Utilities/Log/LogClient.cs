@@ -62,9 +62,21 @@ namespace Digimezzo.Utilities.Log
         #endregion
 
         #region Private
-        private void AddLogEntry(string level, StackFrame frame, string message)
+        private void AddLogEntry(LogLevel level, StackFrame frame, string message, string[] args)
         {
             this.logTimer.Stop();
+
+            try
+            {
+                if (args != null) message = string.Format(message, args);
+            }
+            catch (Exception ex)
+            {
+                lock (logEntriesLock)
+                {
+                    this.logEntries.Enqueue(new LogEntry() { Level = level, Frame = frame, Message = ex.Message });
+                }
+            }
 
             lock (logEntriesLock)
             {
@@ -105,7 +117,25 @@ namespace Digimezzo.Utilities.Log
                     {
                         using (StreamWriter sw = File.AppendText(this.logfile))
                         {
-                            sw.WriteLine(string.Format("{0}|{1}|{2}|{3}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), entry.Level, callsite, entry.Message));
+                            string levelDescription = string.Empty;
+
+                            switch (entry.Level)
+                            {
+                                case LogLevel.Info:
+                                    levelDescription = "Info";
+                                    break;
+                                case LogLevel.Warning:
+                                    levelDescription = "Warning";
+                                    break;
+                                case LogLevel.Error:
+                                    levelDescription = "Error";
+                                    break;
+                                default:
+                                    levelDescription = "Error";
+                                    break;
+                            }
+
+                            sw.WriteLine(string.Format("{0}|{1}|{2}|{3}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), levelDescription, callsite, entry.Message));
                         }
                         isWriteSuccess = true;
                     }
@@ -202,137 +232,137 @@ namespace Digimezzo.Utilities.Log
 
         public static void Info(string message)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), message);
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, null);
         }
 
         public static void Info(string message, string arg1)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1 });
         }
 
         public static void Info(string message, string arg1, string arg2)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2 });
         }
 
         public static void Info(string message, string arg1, string arg2, string arg3)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3 });
         }
 
         public static void Info(string message, string arg1, string arg2, string arg3, string arg4)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4 });
         }
 
         public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5 });
         }
 
         public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6 });
         }
 
         public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         }
 
         public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
         {
-            LogClient.Instance.AddLogEntry("Info", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
         public static void Warning(string message)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), message);
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, null);
         }
 
         public static void Warning(string message, string arg1)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1 });
         }
 
         public static void Warning(string message, string arg1, string arg2)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2 });
         }
 
         public static void Warning(string message, string arg1, string arg2, string arg3)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3 });
         }
 
         public static void Warning(string message, string arg1, string arg2, string arg3, string arg4)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4 });
         }
 
         public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5 });
         }
 
         public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6 });
         }
 
         public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         }
 
         public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
         {
-            LogClient.Instance.AddLogEntry("Warning", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
         public static void Error(string message)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), message);
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, null);
         }
 
         public static void Error(string message, string arg1)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1 });
         }
 
         public static void Error(string message, string arg1, string arg2)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2 });
         }
 
         public static void Error(string message, string arg1, string arg2, string arg3)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3 });
         }
 
         public static void Error(string message, string arg1, string arg2, string arg3, string arg4)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4 });
         }
 
         public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5 });
         }
 
         public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6 });
         }
 
         public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         }
 
         public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
         {
-            LogClient.Instance.AddLogEntry("Error", new StackFrame(1), string.Format(message, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
         #endregion
     }

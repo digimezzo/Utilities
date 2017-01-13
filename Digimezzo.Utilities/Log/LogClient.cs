@@ -230,137 +230,17 @@ namespace Digimezzo.Utilities.Log
             return sb.ToString();
         }
 
-        public static void Info(string message)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, null);
-        }
-
-        public static void Info(string message, string arg1)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1 });
-        }
-
-        public static void Info(string message, string arg1, string arg2)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2 });
-        }
-
-        public static void Info(string message, string arg1, string arg2, string arg3)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3 });
-        }
-
-        public static void Info(string message, string arg1, string arg2, string arg3, string arg4)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4 });
-        }
-
-        public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5 });
-        }
-
-        public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6 });
-        }
-
-        public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        }
-
-        public static void Info(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        public static void Info(string message, string arg1="", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
         {
             LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
-        public static void Warning(string message)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, null);
-        }
-
-        public static void Warning(string message, string arg1)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2, string arg3)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        }
-
-        public static void Warning(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        public static void Warning(string message, string arg1 = "", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
         {
             LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
-        public static void Error(string message)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, null);
-        }
-
-        public static void Error(string message, string arg1)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1 });
-        }
-
-        public static void Error(string message, string arg1, string arg2)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2 });
-        }
-
-        public static void Error(string message, string arg1, string arg2, string arg3)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3 });
-        }
-
-        public static void Error(string message, string arg1, string arg2, string arg3, string arg4)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4 });
-        }
-
-        public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5 });
-        }
-
-        public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6 });
-        }
-
-        public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7)
-        {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        }
-
-        public static void Error(string message, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        public static void Error(string message, string arg1 = "", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
         {
             LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }

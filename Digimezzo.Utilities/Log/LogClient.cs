@@ -62,7 +62,7 @@ namespace Digimezzo.Utilities.Log
         #endregion
 
         #region Private
-        private void AddLogEntry(LogLevels level, StackFrame frame, string message, string[] args)
+        private void AddLogEntry(LogLevel level, StackFrame frame, string message, string[] args)
         {
             this.logTimer.Stop();
 
@@ -121,13 +121,13 @@ namespace Digimezzo.Utilities.Log
 
                             switch (entry.Level)
                             {
-                                case LogLevels.Info:
+                                case LogLevel.Info:
                                     levelDescription = "Info";
                                     break;
-                                case LogLevels.Warning:
+                                case LogLevel.Warning:
                                     levelDescription = "Warning";
                                     break;
-                                case LogLevels.Error:
+                                case LogLevel.Error:
                                     levelDescription = "Error";
                                     break;
                                 default:
@@ -232,17 +232,17 @@ namespace Digimezzo.Utilities.Log
 
         public static void Info(string message, string arg1="", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
         {
-            LogClient.Instance.AddLogEntry(LogLevels.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
         public static void Warning(string message, string arg1 = "", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
         {
-            LogClient.Instance.AddLogEntry(LogLevels.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
         public static void Error(string message, string arg1 = "", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
         {
-            LogClient.Instance.AddLogEntry(LogLevels.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
         #endregion
     }

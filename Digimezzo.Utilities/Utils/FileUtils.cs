@@ -26,6 +26,16 @@ namespace Digimezzo.Utilities.Utils
             return new System.IO.FileInfo(path).Length;
         }
 
+        public static DateTime DateCreated(string path)
+        {
+            return new System.IO.FileInfo(path).CreationTime;
+        }
+
+        public static long DateCreatedTicks(string path)
+        {
+            return new System.IO.FileInfo(path).CreationTime.Ticks;
+        }
+
         public static DateTime DateModified(string path)
         {
             return new System.IO.FileInfo(path).LastWriteTime;

@@ -13,9 +13,22 @@ namespace Digimezzo.Utilities.Utils
         /// <returns></returns>
         public static string GetFriendlyWindowsVersion()
         {
-            var name = (from x in new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem").Get().Cast<ManagementObject>()
-                        select x.GetPropertyValue("Caption")).FirstOrDefault();
-            return name != null ? name.ToString() : "Unknown";
+            object nameObject = null;
+            string name = null;
+
+            try
+            {
+                nameObject = (from x in new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem").Get().Cast<ManagementObject>()
+                              select x.GetPropertyValue("Caption")).FirstOrDefault();
+
+                name = nameObject != null ? nameObject.ToString() : "Unknown";
+            }
+            catch (Exception)
+            {
+                name = "Unknown";
+            }
+            
+            return name;
         }
 
         /// <summary>

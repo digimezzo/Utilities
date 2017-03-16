@@ -2,12 +2,20 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Windows.Media.Imaging;
 
 namespace Digimezzo.Utilities.Utils
 {
     public static class ImageUtils
     {
+        private static readonly ImageCodecInfo JpegCodec;
+
+        static ImageUtils()
+        {
+            JpegCodec = ImageCodecInfo.GetImageEncoders().First(encoder => encoder.MimeType == "image/jpeg");
+        }
+
         public static byte[] Image2GrayScaleByteArray(string filename)
         {
             byte[] byteArray = null;
@@ -94,72 +102,48 @@ namespace Digimezzo.Utilities.Utils
             return byteArray;
         }
 
-        public static void Byte2Jpg(byte[] imageData, string filename, int width, int height, long qualityPercent)
+        public static void Image2File(Image img, ImageCodecInfo codec, string filename,int width, int height,
+            long qualityPercent)
         {
+            var encoderParams = new EncoderParameters
+            {
+                Param = { [0] = new EncoderParameter(Encoder.Quality, qualityPercent) }
+            };
+
+            Image scaledImg = null;
             try
             {
-                ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-                ImageCodecInfo jpegCodec = null;
-
-                foreach (ImageCodecInfo codec in codecs)
+                if (width > 0 && height > 0)
                 {
-                    if (codec.MimeType == "image/jpeg")
-                    {
-                        jpegCodec = codec;
-                    }
+                    scaledImg = img.GetThumbnailImage(width, height, null, IntPtr.Zero);
+                    img = scaledImg;
                 }
 
-                using (System.Drawing.Image img = System.Drawing.Image.FromStream(new MemoryStream(imageData)))
-                {
-
-                    EncoderParameters encoderParams = new EncoderParameters();
-                    encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityPercent);
-
-                    if (width > 0 & height > 0)
-                    {
-                        // Resize only if a iThumbnailWidth and iThumbnailHeight are set
-                        using (System.Drawing.Image thumb = img.GetThumbnailImage(width, height, null, IntPtr.Zero))
-                        {
-                            try
-                            {
-                                thumb.Save(filename, jpegCodec, encoderParams);
-                            }
-                            catch (Exception)
-                            {
-                                // When saving fails, a corrupt file is left behind. Let's try to delete it.
-                                if (System.IO.File.Exists(filename))
-                                {
-                                    System.IO.File.Delete(filename);
-                                }
-
-                                throw;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Else, just save the original size to file
-                        try
-                        {
-                            img.Save(filename, jpegCodec, encoderParams);
-                        }
-                        catch (Exception)
-                        {
-                            // When saving fails, a corrupt file is left behind. Let's try to delete it.
-                            if (System.IO.File.Exists(filename))
-                            {
-                                System.IO.File.Delete(filename);
-                            }
-
-                            throw;
-                        }
-                    }
-                }
+                if (File.Exists(filename))
+                    File.Delete(filename);
+                img.Save(filename, codec, encoderParams);
             }
-            catch (Exception)
+            finally
             {
-                throw;
+                scaledImg?.Dispose();
             }
+        }
+
+        public static void Byte2ImageFile(byte[] imageData, ImageCodecInfo codec, string filename, int width, int height,
+            long qualityPercent)
+        {
+            using (var ms = new MemoryStream(imageData))
+            {
+                using (var img = Image.FromStream(ms))
+                {
+                    Image2File(img, codec, filename, width, height, qualityPercent);
+                }
+            }
+        }
+
+        public static void Byte2Jpg(byte[] imageData, string filename, int width, int height, long qualityPercent)
+        {
+            Byte2ImageFile(imageData, JpegCodec, filename, width, height, qualityPercent);
         }
 
         public static long GetImageDataSize(byte[] imageData)

@@ -62,7 +62,7 @@ namespace Digimezzo.Utilities.Log
         #endregion
 
         #region Private
-        private void AddLogEntry(LogLevel level, StackFrame frame, string message, string[] args)
+        private void AddLogEntry(LogLevel level, string callsite, string message, object[] args)
         {
             this.logTimer.Stop();
 
@@ -74,37 +74,43 @@ namespace Digimezzo.Utilities.Log
             {
                 lock (logEntriesLock)
                 {
-                    this.logEntries.Enqueue(new LogEntry() { Level = level, Frame = frame, Message = ex.Message });
+                    this.logEntries.Enqueue(new LogEntry() { Level = level, Callsite = callsite, Message = ex.Message });
                 }
             }
 
             lock (logEntriesLock)
             {
-                this.logEntries.Enqueue(new LogEntry() { Level = level, Frame = frame, Message = message });
+                this.logEntries.Enqueue(new LogEntry() { Level = level, Callsite = callsite, Message = message });
             }
 
             this.logTimer.Start();
+        }
+
+        private static string GetCallsite(StackFrame frame)
+        {
+            string callsite = string.Empty;
+
+            try
+            {
+                // Try to find the callsite
+                var method = frame.GetMethod();
+                var className = method.ReflectedType.Name;
+                var methodName = method.Name;
+
+                callsite = className + "." + methodName;
+            }
+            catch (Exception)
+            {
+                // Swallow
+            }
+
+            return callsite;
         }
 
         private void TryWrite(LogEntry entry)
         {
             try
             {
-                string callsite = string.Empty;
-
-                try
-                {
-                    // Try to find the callsite
-                    var method = entry.Frame.GetMethod();
-                    var className = method.ReflectedType.Name;
-                    var methodName = method.Name;
-
-                    callsite = className + "." + methodName;
-                }
-                catch (Exception)
-                {
-                }
-
                 // If the log directory doesn't exist, create it.
                 if (!Directory.Exists(this.logfolder)) Directory.CreateDirectory(this.logfolder);
 
@@ -135,7 +141,7 @@ namespace Digimezzo.Utilities.Log
                                     break;
                             }
 
-                            sw.WriteLine(string.Format("{0}|{1}|{2}|{3}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), levelDescription, callsite, entry.Message));
+                            sw.WriteLine(string.Format("{0}|{1}|{2}|{3}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), levelDescription, entry.Callsite, entry.Message));
                         }
                         isWriteSuccess = true;
                     }
@@ -229,20 +235,41 @@ namespace Digimezzo.Utilities.Log
 
             return sb.ToString();
         }
+        #endregion
 
-        public static void Info(string message, string arg1="", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
+        #region Info
+        public static void Info(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null)
         {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+            LogClient.Instance.AddLogEntry(LogLevel.Info, GetCallsite(new StackFrame(1)), message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
-        public static void Warning(string message, string arg1 = "", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
+        public static void Info2(string message, string callsite, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null)
         {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+            LogClient.Instance.AddLogEntry(LogLevel.Info, callsite, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        }
+        #endregion
+
+        #region Warning
+        public static void Warning(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null)
+        {
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, GetCallsite(new StackFrame(1)), message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
 
-        public static void Error(string message, string arg1 = "", string arg2 = "", string arg3 = "", string arg4 = "", string arg5 = "", string arg6 = "", string arg7 = "", string arg8 = "")
+        public static void Warning2(string message, string callsite, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null)
         {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, new StackFrame(1), message, new string[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, callsite, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        }
+        #endregion
+
+        #region Error
+        public static void Error(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null)
+        {
+            LogClient.Instance.AddLogEntry(LogLevel.Error, GetCallsite(new StackFrame(1)), message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        }
+
+        public static void Error2(string message, string callsite, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null)
+        {
+            LogClient.Instance.AddLogEntry(LogLevel.Error, callsite, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
         #endregion
     }

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Helpers\NameValue.cs" />
     <Compile Include="Helpers\OperationResult.cs" />
+    <Compile Include="ColorSpace\HSLColor.cs" />
     <Compile Include="IO\Actions.cs" />
     <Compile Include="IO\ProcessExecutable.cs" />
     <Compile Include="IO\LegacyPaths.cs" />

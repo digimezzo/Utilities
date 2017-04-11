@@ -105,7 +105,7 @@ namespace Digimezzo.Utilities.Utils
                 case SHFileOperationReturnCode.DE_ERROR_MAX: throw new MaxPathExpection(path);
                 case SHFileOperationReturnCode.ERRORONDEST:
                     throw new IOException("An unspecified error occurred on the destination.");
-                default: throw new NotImplementedException();
+                default: throw new NotImplementedException("Not supported SHFileOperation return code: " + returnCode);
             }
         }
 

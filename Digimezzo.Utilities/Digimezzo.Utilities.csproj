@@ -58,6 +58,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expection\IOExpection.cs" />
     <Compile Include="Helpers\NameValue.cs" />
     <Compile Include="Helpers\OperationResult.cs" />
     <Compile Include="ColorSpace\HSLColor.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Win32\AccentState.cs" />
     <Compile Include="Win32\APPBARDATA.cs" />
     <Compile Include="Win32\RECT.cs" />
+    <Compile Include="Win32\SHFileOperationReturnCode.cs" />
     <Compile Include="Win32\Taskbar.cs" />
     <Compile Include="Win32\TaskbarPosition.cs" />
     <Compile Include="Win32\FileOperationType.cs" />

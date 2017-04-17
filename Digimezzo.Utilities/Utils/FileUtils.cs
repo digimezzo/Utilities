@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
+using Digimezzo.Utilities.Expection;
 using Digimezzo.Utilities.Win32;
 
 namespace Digimezzo.Utilities.Utils
@@ -88,20 +90,22 @@ namespace Digimezzo.Utilities.Utils
         /// <param name="flags">FileOperationFlags to add in addition to FOF_ALLOWUNDO</param>
         private static bool SendToRecycleBin(string path, FileOperationFlags flags)
         {
-            try
+            var fs = new SHFILEOPSTRUCT
             {
-                var fs = new SHFILEOPSTRUCT
-                {
-                    wFunc = FileOperationType.FO_DELETE,
-                    pFrom = path + '\0' + '\0',
-                    fFlags = FileOperationFlags.FOF_ALLOWUNDO | flags
-                };
-                NativeMethods.SHFileOperation(ref fs);
-                return true;
-            }
-            catch (Exception)
+                wFunc = FileOperationType.FO_DELETE,
+                pFrom = path + '\0' + '\0',
+                fFlags = FileOperationFlags.FOF_ALLOWUNDO | flags
+            };
+            var returnCode = (SHFileOperationReturnCode) NativeMethods.SHFileOperation(ref fs);
+            switch (returnCode)
             {
-                return false;
+                case SHFileOperationReturnCode.SUCCESSFUL: return true;
+                case SHFileOperationReturnCode.ERROR_SHARING_VIOLATION:
+                    throw new FileInUsingExpection(path);
+                case SHFileOperationReturnCode.DE_ERROR_MAX: throw new MaxPathExpection(path);
+                case SHFileOperationReturnCode.ERRORONDEST:
+                    throw new IOException("An unspecified error occurred on the destination.");
+                default: throw new NotImplementedException("Not supported SHFileOperation return code: " + returnCode);
             }
         }
 

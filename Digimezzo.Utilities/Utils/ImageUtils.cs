@@ -239,5 +239,45 @@ namespace Digimezzo.Utilities.Utils
 
             return scaledSize;
         }
+
+        public static System.Windows.Media.Color GetDominantColor(string path)
+        {
+            var bmp = new System.Drawing.Bitmap(1, 1);
+            System.Drawing.Bitmap origBmp = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromFile(path);
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
+            {
+                // Interpolation mode needs to be HighQualityBilinear or HighQualityBicubic
+                // or this method doesn't work.  With either setting, the averaging result is
+                // slighlty different.
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(origBmp, new System.Drawing.Rectangle(0, 0, 1, 1));
+            }
+            System.Drawing.Color color = bmp.GetPixel(0, 0);
+
+            return System.Windows.Media.Color.FromRgb(color.R, color.G, color.B);
+        }
+
+        public static System.Windows.Media.Color GetDominantColor(byte[] imageData)
+        {
+            var bmp = new System.Drawing.Bitmap(1, 1);
+            System.Drawing.Bitmap origBmp;
+
+            using (var ms = new MemoryStream(imageData))
+            {
+                origBmp = new Bitmap(ms);
+            }
+
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
+            {
+                // Interpolation mode needs to be HighQualityBilinear or HighQualityBicubic
+                // or this method doesn't work.  With either setting, the averaging result is
+                // slighlty different.
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(origBmp, new System.Drawing.Rectangle(0, 0, 1, 1));
+            }
+            System.Drawing.Color color = bmp.GetPixel(0, 0);
+
+            return System.Windows.Media.Color.FromRgb(color.R, color.G, color.B); ;
+        }
     }
 }

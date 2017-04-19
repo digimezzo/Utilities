@@ -96,6 +96,12 @@ namespace Digimezzo.Utilities.Utils
             int normalEWS = 262400; // 'exStyle' cannot be restored by 'OR' operation. Use this 'magic' number instead.
             NativeMethods.SetWindowLongPtr(wndHelper.Handle, Convert.ToInt32(GWL.EXSTYLE), (IntPtr)normalEWS);
         }
+
+        public static void RemoveWindowCaption(Window win)
+        {
+            var hwnd = new WindowInteropHelper(win).Handle;
+            NativeMethods.SetWindowLongPtr(hwnd, Convert.ToInt32(GWL.STYLE), (IntPtr)(NativeMethods.GetWindowLong(hwnd, Convert.ToInt32(GWL.STYLE)) & ~Convert.ToInt32(WS.SYSMENU)));
+        }
         #endregion
     }
 }

@@ -6,6 +6,7 @@
         private string name;
         private string description;
         private string url;
+        private string licenseUrl;
         #endregion
 
         #region Properties
@@ -25,6 +26,12 @@
         {
             get { return url; }
             set { url = value; }
+        }
+
+        public string LicenseUrl
+        {
+            get { return licenseUrl; }
+            set { licenseUrl = value; }
         }
         #endregion
     }

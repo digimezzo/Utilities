@@ -155,17 +155,19 @@ namespace Digimezzo.Utilities.ColorSpace
             return new HSLColor(h, s, l);
         }
 
-        public static Color TrimLuminosity(Color color, int trimStart, int trimEnd)
+        public static Color Normalize(Color color, int value)
         {
+            if (value < 0 | value > 100) return color;
+
             HSLColor hslColor = HSLColor.GetFromRgb(color);
 
-            if (hslColor.Luminosity < trimStart)
+            if (hslColor.Luminosity < value)
             {
-                hslColor.Luminosity = trimStart;
+                hslColor.Luminosity = value;
             }
-            else if (hslColor.Luminosity > 100 - trimEnd)
+            else if (hslColor.Luminosity > 100 - value)
             {
-                hslColor.Luminosity = 100 - trimEnd;
+                hslColor.Luminosity = 100 - value;
             }
 
             return hslColor.ToRgb();

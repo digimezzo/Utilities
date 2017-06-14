@@ -242,40 +242,37 @@ namespace Digimezzo.Utilities.Utils
 
         public static System.Windows.Media.Color GetDominantColor(string path)
         {
-            var bmp = new System.Drawing.Bitmap(1, 1);
-            System.Drawing.Bitmap origBmp = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromFile(path);
-            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
-            {
-                // Interpolation mode needs to be HighQualityBilinear or HighQualityBicubic
-                // or this method doesn't work.  With either setting, the averaging result is
-                // slighlty different.
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(origBmp, new System.Drawing.Rectangle(0, 0, 1, 1));
-            }
-            System.Drawing.Color color = bmp.GetPixel(0, 0);
+            System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromFile(path);
 
-            return System.Windows.Media.Color.FromRgb(color.R, color.G, color.B);
+            return GetDominantColor(bitmap);
         }
 
         public static System.Windows.Media.Color GetDominantColor(byte[] imageData)
         {
-            var bmp = new System.Drawing.Bitmap(1, 1);
-            System.Drawing.Bitmap origBmp;
+            System.Drawing.Bitmap bitmap;
 
             using (var ms = new MemoryStream(imageData))
             {
-                origBmp = new Bitmap(ms);
+                bitmap = new Bitmap(ms);
             }
 
-            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
+            return GetDominantColor(bitmap);
+        }
+
+        private static System.Windows.Media.Color GetDominantColor(System.Drawing.Bitmap bitmap)
+        {
+            var newBitmap = new System.Drawing.Bitmap(1, 1);
+
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(newBitmap))
             {
                 // Interpolation mode needs to be HighQualityBilinear or HighQualityBicubic
-                // or this method doesn't work.  With either setting, the averaging result is
-                // slighlty different.
+                // or this method doesn't work. With either setting, the averaging result is
+                // slightly different.
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(origBmp, new System.Drawing.Rectangle(0, 0, 1, 1));
+                g.DrawImage(bitmap, new System.Drawing.Rectangle(0, 0, 1, 1));
             }
-            System.Drawing.Color color = bmp.GetPixel(0, 0);
+
+            System.Drawing.Color color = newBitmap.GetPixel(0, 0);
 
             return System.Windows.Media.Color.FromRgb(color.R, color.G, color.B); ;
         }

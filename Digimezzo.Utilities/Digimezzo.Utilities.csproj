@@ -96,6 +96,7 @@
     <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Utils\ResourceUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\ValidationUtils.cs" />
     <Compile Include="Utils\VisualTreeUtils.cs" />
     <Compile Include="Utils\WindowUtils.cs" />
     <Compile Include="Win32\ABE.cs" />

@@ -4,8 +4,10 @@ namespace Digimezzo.Utilities.Log
 {
     public class LogEntry
     {
-        public LogLevel Level { get; set; }
-        public string Callsite { get; set; }
+        public string TimeStamp { get; set; }
+        public string Level { get; set; }
+        public string CallerFilePath { get; set; }
+        public string CallerMemberName { get; set; }
         public string Message { get; set; }
     }
 }

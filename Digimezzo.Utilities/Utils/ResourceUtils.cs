@@ -7,7 +7,8 @@ namespace Digimezzo.Utilities.Utils
     {
         public static string GetStringResource(string resourceName)
         {
-            return Application.Current.TryFindResource(resourceName).ToString();
+            object resource = Application.Current.TryFindResource(resourceName);
+            return resource == null ? resourceName : resource.ToString();
         }
 
         public static Geometry GetGeometryResource(string resourceName)

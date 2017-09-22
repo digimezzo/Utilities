@@ -62,7 +62,7 @@ namespace Digimezzo.Utilities.Log
         #endregion
 
         #region Private
-        private void AddLogEntry(LogLevel level, string message, object[] args, string callerFilePath, string callerMemberName)
+        private void AddLogEntry(LogLevel level, string message, object[] args, string callerFilePath, string callerMemberName, int lineNumber)
         {
             this.logTimer.Stop();
 
@@ -90,7 +90,13 @@ namespace Digimezzo.Utilities.Log
 
                 lock (logEntriesLock)
                 {
-                    this.logEntries.Enqueue(new LogEntry { TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), Level = levelDescription, CallerFilePath = callerFilePath, CallerMemberName = callerMemberName, Message = message });
+                    this.logEntries.Enqueue(new LogEntry {
+                        TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                        Level = levelDescription,
+                        CallerFilePath = callerFilePath,
+                        CallerMemberName = callerMemberName, Message = message,
+                        CallerLineNumber = lineNumber
+                    });
                 }
             }
             catch (Exception)
@@ -117,7 +123,7 @@ namespace Digimezzo.Utilities.Log
                     {
                         using (StreamWriter sw = File.AppendText(this.logfile))
                         {
-                            sw.WriteLine(string.Format("{0}|{1}|{2}.{3}|{4}", entry.TimeStamp, entry.Level, Path.GetFileNameWithoutExtension(entry.CallerFilePath), entry.CallerMemberName, entry.Message));
+                            sw.WriteLine(string.Format($"{entry.TimeStamp}|{entry.Level}|{Path.GetFileNameWithoutExtension(entry.CallerFilePath)}.{entry.CallerMemberName}|{entry.CallerLineNumber}|{entry.Message}"));
                         }
                         isWriteSuccess = true;
                     }
@@ -214,23 +220,23 @@ namespace Digimezzo.Utilities.Log
         #endregion
 
         #region Info
-        public static void Info(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "")
+        public static void Info(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0)
         {
-            LogClient.Instance.AddLogEntry(LogLevel.Info, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName);
+            LogClient.Instance.AddLogEntry(LogLevel.Info, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName, lineNumber);
         }
         #endregion
 
         #region Warning
-        public static void Warning(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "")
+        public static void Warning(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0)
         {
-            LogClient.Instance.AddLogEntry(LogLevel.Warning, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName);
+            LogClient.Instance.AddLogEntry(LogLevel.Warning, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName, lineNumber);
         }
         #endregion
 
         #region Error
-        public static void Error(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "")
+        public static void Error(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0)
         {
-            LogClient.Instance.AddLogEntry(LogLevel.Error, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName);
+            LogClient.Instance.AddLogEntry(LogLevel.Error, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName, lineNumber);
         }
         #endregion
     }

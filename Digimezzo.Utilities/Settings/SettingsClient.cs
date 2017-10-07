@@ -9,6 +9,8 @@ using System.Xml.Linq;
 
 namespace Digimezzo.Utilities.Settings
 {
+    public delegate void SettingChangedEventHandler(object sender, SettingChangedEventArgs e);
+
     public class SettingsClient
     {
         #region Variables
@@ -344,9 +346,14 @@ namespace Digimezzo.Utilities.Settings
             SettingsClient.Instance.SettingsUpgrade();
         }
 
-        public static void Set<T>(string settingNamespace, string settingName, T value)
+        public static void Set<T>(string settingNamespace, string settingName, T value, bool raiseEvent = false)
         {
-            SettingsClient.Instance.SetValue<T>(settingNamespace, settingName,value);
+            SettingsClient.Instance.SetValue<T>(settingNamespace, settingName, value);
+
+            if (raiseEvent)
+            {
+                SettingChanged(SettingsClient.Instance, new SettingChangedEventArgs() { SettingNamespace = settingNamespace, SettingName = settingName });
+            }
         }
 
         public static T Get<T>(string settingNamespace, string settingName)
@@ -358,6 +365,15 @@ namespace Digimezzo.Utilities.Settings
         {
             return SettingsClient.Instance.GetBaseValue<T>(settingNamespace, settingName);
         }
+
+        public static bool IsSettingChanged(SettingChangedEventArgs e, string settingNamespace, string settingName)
+        {
+            return e.SettingNamespace.Equals(settingNamespace) && e.SettingName.Equals(settingName);
+        }
+        #endregion
+
+        #region Events
+        public static event SettingChangedEventHandler SettingChanged = delegate { };
         #endregion
     }
 }

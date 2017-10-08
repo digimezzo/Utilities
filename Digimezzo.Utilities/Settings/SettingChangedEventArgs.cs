@@ -6,5 +6,6 @@ namespace Digimezzo.Utilities.Settings
     {
         public string SettingNamespace { get; set; }
         public string SettingName { get; set; }
+        public object SettingValue { get; set; }
     }
 }

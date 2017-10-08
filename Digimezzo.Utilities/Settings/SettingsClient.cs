@@ -352,7 +352,7 @@ namespace Digimezzo.Utilities.Settings
 
             if (raiseEvent)
             {
-                SettingChanged(SettingsClient.Instance, new SettingChangedEventArgs() { SettingNamespace = settingNamespace, SettingName = settingName });
+                SettingChanged(SettingsClient.Instance, new SettingChangedEventArgs() { SettingNamespace = settingNamespace, SettingName = settingName, newValue = value });
             }
         }
 

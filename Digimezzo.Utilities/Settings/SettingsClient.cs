@@ -60,23 +60,41 @@ namespace Digimezzo.Utilities.Settings
                 this.TryCreateApplicationFolder();
             }
 
-            this.settingsFile = System.IO.Path.Combine(this.applicationFolder, "Settings.xml");
+            this.settingsFile = Path.Combine(this.applicationFolder, "Settings.xml");
 
-            // Check if Settings.xml exists in the given path. If not,
-            // create a new Settings.xml based on BaseSettings.xml
+            // Make sure there is a settings file. It's needed further.
             if (!File.Exists(this.settingsFile))
             {
-                File.Copy(this.baseSettingsFile, this.settingsFile);
+                File.Copy(this.baseSettingsFile, this.settingsFile, true);
             }
 
+            // Check if the settings need an upgrade or downgrade/reset
+            if (this.CheckSettingsVersion() == 0)
+            {
+                // Settings are up to date: do nothing.
+            }
+            else if(this.CheckSettingsVersion() == 1)
+            {
+                // Upgrade settings
+                this.UpgradeSettings();
+            }
+            else if (this.CheckSettingsVersion() == -1)
+            {
+                // Downgrade/reset settings
+                this.DowngradeSettings();
+            }
+        }
+
+        private void LoadSettings()
+        {
             try
             {
-                // Load Settings.xml in memory
+                // Load the settings file in memory
                 this.settingsDoc = XDocument.Load(this.settingsFile);
             }
             catch (Exception)
             {
-                // After a crash, the Settings file is sometimes empty.  If that
+                // After a crash, the settings file is sometimes empty.  If that
                 // happens, copy the BaseSettings file (there is no way to restore
                 // settings from a broken file anyway) and try to load the Settings
                 // file again. 
@@ -153,31 +171,44 @@ namespace Digimezzo.Utilities.Settings
             this.settingsDoc.Save(this.settingsFile);
         }
 
-        private bool IsSettingsUpgradeNeeded()
+        private int CheckSettingsVersion()
         {
-            bool returnValue = false;
+            this.LoadSettings();
 
-            // Try to get the previous settings version
-            int previousVersion = 0;
+            // Try to get the current settings version
+            int currentVersion = 0;
+            int baseVersion = this.GetBaseValue<int>("Configuration", "Version");
 
             try
             {
-                previousVersion = this.GetValue<int>("Configuration", "Version");
+                currentVersion = this.GetValue<int>("Configuration", "Version");
             }
             catch (Exception)
             {
             }
 
-            // Check if the existing Settings.xml is out of date
-            if (previousVersion < this.GetBaseValue<int>("Configuration", "Version"))
+            // Compare versions
+            if (currentVersion == baseVersion)
             {
-                returnValue = true;
+                return 0; // Do nothing
+            }
+            else if (currentVersion < baseVersion)
+            {
+                return 1; // Upgrade
             }
 
-            return returnValue;
+            return -1; // Downgrade/Reset
         }
 
-        private void SettingsUpgrade()
+        private void DowngradeSettings()
+        {
+            File.Copy(this.baseSettingsFile, this.settingsFile, true);
+
+            // Make sure the settings are up to date in memory.
+            this.LoadSettings();
+        }
+
+        private void UpgradeSettings()
         {
             // Get the old settings
             List<SettingEntry> oldSettings = default(List<SettingEntry>);
@@ -215,6 +246,9 @@ namespace Digimezzo.Utilities.Settings
                     // If we fail, we do nothing.
                 }
             }
+
+            // Make sure the settings are up to date in memory.
+            this.LoadSettings();
         }
 
         private T GetBaseValue<T>(string settingNamespace, string settingName)
@@ -334,16 +368,6 @@ namespace Digimezzo.Utilities.Settings
         public static void Write()
         {
             SettingsClient.Instance.WriteToFile();
-        }
-
-        public static bool IsUpgradeNeeded()
-        {
-            return SettingsClient.Instance.IsSettingsUpgradeNeeded();
-        }
-
-        public static void Upgrade()
-        {
-            SettingsClient.Instance.SettingsUpgrade();
         }
 
         public static void Set<T>(string settingNamespace, string settingName, T value, bool raiseEvent = false)

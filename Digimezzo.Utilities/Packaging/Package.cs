@@ -56,7 +56,7 @@ namespace Digimezzo.Utilities.Packaging
 
                 if (this.version.Build != 0)
                 {
-                    return string.Format("{0}.{1}.{2})", this.version.Major, this.version.Minor, this.version.Build, this.version.Revision);
+                    return string.Format("{0}.{1}.{2}", this.version.Major, this.version.Minor, this.version.Build, this.version.Revision);
                 }
                 else
                 {

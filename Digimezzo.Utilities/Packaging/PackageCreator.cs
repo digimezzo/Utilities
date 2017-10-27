@@ -342,7 +342,7 @@ namespace Digimezzo.Utilities.Packaging
 
                             foreach (FileInfo f in fi)
                             {
-                                archive.CreateEntryFromFile(f.FullName, f.Directory.Name +"/"+ f.Name);
+                                archive.CreateEntryFromFile(f.FullName, d +"/"+ f.Name);
                             }
                         }
 

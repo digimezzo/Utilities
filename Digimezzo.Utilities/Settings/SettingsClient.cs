@@ -62,26 +62,36 @@ namespace Digimezzo.Utilities.Settings
 
             this.settingsFile = Path.Combine(this.applicationFolder, "Settings.xml");
 
-            // Make sure there is a settings file. It's needed further.
+            // Make sure there is a settings file.
             if (!File.Exists(this.settingsFile))
             {
                 File.Copy(this.baseSettingsFile, this.settingsFile, true);
             }
 
-            // Check if the settings need an upgrade or downgrade/reset
-            if (this.CheckSettingsVersion() == 0)
+            // Load the settings in memory
+            this.LoadSettings();
+        }
+
+        public static bool IsMigrationNeeded()
+        {
+            return SettingsClient.Instance.CheckSettingsVersion() != 0;
+        }
+
+        public static void Migrate()
+        {
+            if (SettingsClient.Instance.CheckSettingsVersion() == 0)
             {
                 // Settings are up to date: do nothing.
             }
-            else if(this.CheckSettingsVersion() == 1)
+            else if (SettingsClient.Instance.CheckSettingsVersion() == 1)
             {
                 // Upgrade settings
-                this.UpgradeSettings();
+                SettingsClient.Instance.UpgradeSettings();
             }
-            else if (this.CheckSettingsVersion() == -1)
+            else if (SettingsClient.Instance.CheckSettingsVersion() == -1)
             {
                 // Downgrade/reset settings
-                this.DowngradeSettings();
+                SettingsClient.Instance.DowngradeSettings();
             }
         }
 
@@ -204,7 +214,7 @@ namespace Digimezzo.Utilities.Settings
         {
             File.Copy(this.baseSettingsFile, this.settingsFile, true);
 
-            // Make sure the settings are up to date in memory.
+            // Make sure the settings are up to date in memory
             this.LoadSettings();
         }
 
@@ -246,9 +256,6 @@ namespace Digimezzo.Utilities.Settings
                     // If we fail, we do nothing.
                 }
             }
-
-            // Make sure the settings are up to date in memory.
-            this.LoadSettings();
         }
 
         private T GetBaseValue<T>(string settingNamespace, string settingName)

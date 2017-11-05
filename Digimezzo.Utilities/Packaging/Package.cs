@@ -25,6 +25,18 @@ namespace Digimezzo.Utilities.Packaging
             }
         }
 
+        public string UnformattedVersion
+        {
+            get
+            {
+                //  {0}: Major Version,
+                //  {1}: Minor Version,
+                //  {2}: Build Number,
+                //  {3}: Revision
+                return string.Format("{0}.{1}.{2}.{3}", this.version.Major, this.version.Minor, this.version.Build, this.version.Revision);
+            }
+        }
+
         public string FormattedVersion
         {
             get

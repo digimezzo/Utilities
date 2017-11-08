@@ -7,7 +7,6 @@ namespace Digimezzo.Utilities.Packaging
         #region Properties
         private string name { get; set; }
         private Version version { get; set; }
-        private Configuration configuration { get; set; }
 
         public string Name
         {
@@ -77,30 +76,11 @@ namespace Digimezzo.Utilities.Packaging
             }
         }
 
-        public Configuration Configuration
-        {
-            get
-            {
-                return this.configuration;
-            }
-        }
-
-        public string Label
-        {
-            get { return this.configuration == Configuration.Debug ? Constants.Preview : Constants.Release; }
-        }
-
         public string Filename
         {
             get
             {
-                string filename = string.Format("{0} {1}", this.name, this.version.ToString());
-
-                if (this.Configuration == Configuration.Debug)
-                {
-                    filename += " " + Constants.Preview;
-                }
-                return filename;
+                return string.Format("{0} {1}", this.name, this.version.ToString());
             }
         }
 
@@ -130,11 +110,10 @@ namespace Digimezzo.Utilities.Packaging
         #endregion
 
         #region Construction
-        public Package(string name, Version version, Configuration configuration)
+        public Package(string name, Version version)
         {
             this.name = name;
             this.version = version;
-            this.configuration = configuration;
         }
         #endregion
 

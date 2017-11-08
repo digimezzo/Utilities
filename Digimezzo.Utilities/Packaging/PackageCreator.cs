@@ -26,7 +26,6 @@ namespace Digimezzo.Utilities.Packaging
 
         // Remote
         // Requires directory structure on the server: content/software/<ApplicationName>/releases/.update
-        // Requires directory structure on the server: content/software/<ApplicationName>/previews/.update
         private string publishDirectory = ""; // Filled in during Initialize()
         private string publishUpdateSubDirectory = ".update";
         private string versionsFileName = "versions.dat";
@@ -34,9 +33,9 @@ namespace Digimezzo.Utilities.Packaging
         #endregion
 
         #region Construction
-        public PackageCreator(string packageName, Version packageVersion, Configuration configuration)
+        public PackageCreator(string packageName, Version packageVersion)
         {
-            this.package = new Package(packageName, packageVersion, configuration);
+            this.package = new Package(packageName, packageVersion);
         }
         #endregion
 
@@ -380,7 +379,7 @@ namespace Digimezzo.Utilities.Packaging
 
         private void PublishPackage(string server, string port, string username, string password)
         {
-            string subdirectory = this.package.Configuration == Configuration.Debug ? "previews" : "releases";
+            string subdirectory = "releases";
 
             // Upload to FTP Server
             // --------------------
@@ -437,7 +436,7 @@ namespace Digimezzo.Utilities.Packaging
                 if (applicationElement != null)
                 {
                     var versionElement = new XElement("Version", this.package.Version.ToString());
-                    versionElement.SetAttributeValue("Configuration", Convert.ToInt32(this.package.Configuration));
+                    versionElement.SetAttributeValue("Configuration", 1);
 
                     applicationElement.Add(versionElement);
                 }

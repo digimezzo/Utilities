@@ -5,11 +5,28 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Digimezzo.Utilities.Packaging
 {
+    [DataContract]
+    internal class OnlineVersionResult
+    {
+        [DataMember]
+        internal string status;
+
+        [DataMember]
+        internal string status_message;
+
+        [DataMember]
+        internal string data;
+    }
+
     public class PackageCreator
     {
         #region Variables
@@ -25,11 +42,9 @@ namespace Digimezzo.Utilities.Packaging
         private string packageDirectory;
 
         // Remote
-        // Requires directory structure on the server: content/software/<ApplicationName>/releases/.update
+        // Requires directory structure on the server: <ApplicationName>/.update
         private string publishDirectory = ""; // Filled in during Initialize()
         private string publishUpdateSubDirectory = ".update";
-        private string versionsFileName = "versions.dat";
-        private string versionsFileSubDirectory = "content/software";
         #endregion
 
         #region Construction
@@ -40,7 +55,7 @@ namespace Digimezzo.Utilities.Packaging
         #endregion
 
         #region Public
-        public void Execute()
+        public async Task ExecuteAsync()
         {
             // Initialize
             // ----------
@@ -97,7 +112,10 @@ namespace Digimezzo.Utilities.Packaging
                 Console.Write(Environment.NewLine + Environment.NewLine + "Please provide the publishing password:");
                 string password = Console.ReadLine();
 
-                this.PublishPackage(server, port, username, password);
+                Console.Write(Environment.NewLine + Environment.NewLine + "Please provide the database API key:");
+                string apikey = Console.ReadLine();
+
+                await this.PublishPackageAsync(server, port, username, password, apikey);
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write(Environment.NewLine + Environment.NewLine + "Package published");
@@ -122,18 +140,24 @@ namespace Digimezzo.Utilities.Packaging
         #region Private
         private void Initialize()
         {
-            this.publishDirectory = string.Format("content/software/{0}", this.package.Name.ToLower());
-
             this.installablePackageName = this.package.Filename + this.package.InstallableFileExtension;
             this.portablePackageName = this.package.Filename + " - Portable" + this.package.PortableFileExtension;
             this.updatePackageName = this.package.Filename + this.package.UpdateFileExtension;
 
             this.packagerDoc = XDocument.Load("PackagerConfiguration.xml");
 
+            var parentDirectory = (from p in this.packagerDoc.Element("Packager").Element("Publishing").Elements("ParentDirectory")
+                                   select p.Value).FirstOrDefault();
+
+            this.publishDirectory = $"{parentDirectory.TrimEnd('/')}/{this.package.Name.ToLower()}";
+
             this.packageDirectory = (from p in this.packagerDoc.Element("Packager").Element("Packaging").Elements("PackageDirectory")
                                      select p.Value).FirstOrDefault();
 
-            if (!Directory.Exists(this.packageDirectory)) Directory.CreateDirectory(this.packageDirectory);
+            if (!Directory.Exists(this.packageDirectory))
+            {
+                Directory.CreateDirectory(this.packageDirectory);
+            }
 
             this.currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
@@ -166,7 +190,6 @@ namespace Digimezzo.Utilities.Packaging
 
 
                     // Get the bin directory for the WIX runtimes
-
                     var wixBinDirectory = (from p in this.packagerDoc.Element("Packager").Element("Packaging").Element("Installable").Elements("WixBinDirectory")
                                            select p.Value).FirstOrDefault();
 
@@ -192,7 +215,7 @@ namespace Digimezzo.Utilities.Packaging
                     // Wait until the installable file is created
                     while (!File.Exists(this.installablePackageName))
                     {
-                        Task.Delay(1000);
+                        Task.Delay(500);
                     }
 
                     // Copy the installable version to the destination directory (this is a loop because the files can be in use by the .bat file)
@@ -341,7 +364,7 @@ namespace Digimezzo.Utilities.Packaging
 
                             foreach (FileInfo f in fi)
                             {
-                                archive.CreateEntryFromFile(f.FullName, d +"/"+ f.Name);
+                                archive.CreateEntryFromFile(f.FullName, d + "/" + f.Name);
                             }
                         }
 
@@ -377,10 +400,8 @@ namespace Digimezzo.Utilities.Packaging
             }
         }
 
-        private void PublishPackage(string server, string port, string username, string password)
+        private async Task PublishPackageAsync(string server, string port, string username, string password, string apikey)
         {
-            string subdirectory = "releases";
-
             // Upload to FTP Server
             // --------------------
             using (var client = new WebClient())
@@ -388,69 +409,60 @@ namespace Digimezzo.Utilities.Packaging
                 client.Credentials = new NetworkCredential(username, password);
 
                 // Upload Installable package
-                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}/{4}",
+                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}",
                                                 server,
                                                 port,
                                                 this.publishDirectory,
-                                                subdirectory,
                                                 this.installablePackageName),
                                   "STOR",
                                   this.installablePackageName);
 
                 // Upload Portable package
-                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}/{4}",
+                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}",
                                                 server,
                                                 port,
                                                 this.publishDirectory,
-                                                subdirectory,
                                                 this.portablePackageName),
                                   "STOR",
                                   this.portablePackageName);
 
                 // Upload Update package
-                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}/{4}/{5}",
+                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}/{4}",
                                                server,
                                                port,
                                                this.publishDirectory,
-                                               subdirectory,
                                                this.publishUpdateSubDirectory,
                                                this.updatePackageName),
                                  "STOR",
                                  this.updatePackageName);
+            }
 
-                // Download versions file
-                client.DownloadFile(String.Format("ftp://{0}:{1}/{2}/{3}",
-                                                  server,
-                                                  port,
-                                                  this.versionsFileSubDirectory,
-                                                  this.versionsFileName),
-                                    this.versionsFileName);
+            // Add new version to database
+            // ---------------------------
+            var apiUrl = (from p in this.packagerDoc.Element("Packager").Element("Publishing").Elements("ApiUrl")
+                          select p.Value).FirstOrDefault();
 
-                // Update versions file
-                XDocument versionsDoc = XDocument.Load(this.versionsFileName);
+            Uri uri = new Uri($"{apiUrl}&application={this.package.Name}&version={this.package.Version.ToString()}&apikey={apikey}");
+            string jsonResult = string.Empty;
 
-                XElement applicationElement = (from a in versionsDoc.Element("Applications").Elements("Application")
-                                               where a.Attribute("Name").Value.ToLower().Equals(this.package.Name.ToLower())
-                                               select a).FirstOrDefault();
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.ExpectContinue = false;
+                var response = await client.GetAsync(uri);
+                jsonResult = await response.Content.ReadAsStringAsync();
+            }
 
-                if (applicationElement != null)
+            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonResult)))
+            {
+                var deserializer = new DataContractJsonSerializer(typeof(OnlineVersionResult));
+                OnlineVersionResult newOnlineVersionResult = (OnlineVersionResult)deserializer.ReadObject(ms);
+
+                if (!string.IsNullOrEmpty(newOnlineVersionResult.data))
                 {
-                    var versionElement = new XElement("Version", this.package.Version.ToString());
-                    versionElement.SetAttributeValue("Configuration", 1);
-
-                    applicationElement.Add(versionElement);
+                    // We're not doing anything with the status yet
+                    // It might be good to parse it and return success or failure
+                    string status = newOnlineVersionResult.status; 
                 }
-
-                versionsDoc.Save(this.versionsFileName);
-
-                // Upload versions file
-                client.UploadFile(String.Format("ftp://{0}:{1}/{2}/{3}",
-                                               server,
-                                               port,
-                                               this.versionsFileSubDirectory,
-                                               this.versionsFileName),
-                                 "STOR",
-                                 this.versionsFileName);
             }
         }
         #endregion

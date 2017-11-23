@@ -123,7 +123,7 @@ namespace Digimezzo.Utilities.Log
                     {
                         using (StreamWriter sw = File.AppendText(this.logfile))
                         {
-                            sw.WriteLine(string.Format($"{entry.TimeStamp}|{entry.Level}|{Path.GetFileNameWithoutExtension(entry.CallerFilePath)}.{entry.CallerMemberName}|{entry.CallerLineNumber}|{entry.Message}"));
+                            sw.WriteLine($"{entry.TimeStamp}|{entry.Level}|{Path.GetFileNameWithoutExtension(entry.CallerFilePath)}.{entry.CallerMemberName}|{entry.CallerLineNumber}|{entry.Message}");
                         }
                         isWriteSuccess = true;
                     }

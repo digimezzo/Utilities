@@ -9,7 +9,6 @@ namespace Digimezzo.Utilities.Utils
 {
     public class WindowUtils
     {
-        #region Public
         public static void EnableBlur(Window win)
         {
             var windowHelper = new WindowInteropHelper(win);
@@ -102,6 +101,5 @@ namespace Digimezzo.Utilities.Utils
             var hwnd = new WindowInteropHelper(win).Handle;
             NativeMethods.SetWindowLongPtr(hwnd, Convert.ToInt32(GWL.STYLE), (IntPtr)(NativeMethods.GetWindowLong(hwnd, Convert.ToInt32(GWL.STYLE)) & ~Convert.ToInt32(WS.SYSMENU)));
         }
-        #endregion
     }
 }

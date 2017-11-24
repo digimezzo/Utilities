@@ -13,7 +13,6 @@ namespace Digimezzo.Utilities.Settings
 
     public class SettingsClient
     {
-        #region Variables
         private static SettingsClient instance;
         private Timer timer;
         private object timerMutex = new object();
@@ -23,9 +22,7 @@ namespace Digimezzo.Utilities.Settings
         private string applicationFolder;
         private string settingsFile;
         private XDocument settingsDoc;
-        #endregion
 
-        #region Construction
         private SettingsClient()
         {
             this.timer = new System.Timers.Timer(100); // a 10th of a second
@@ -140,9 +137,7 @@ namespace Digimezzo.Utilities.Settings
                 return instance;
             }
         }
-        #endregion
 
-        #region Private
         private bool SettingExists<T>(string settingNamespace, string settingName)
         {
             T value = this.GetValue<T>(settingNamespace, settingName);
@@ -346,9 +341,7 @@ namespace Digimezzo.Utilities.Settings
                 }
             }
         }
-        #endregion
 
-        #region Event Handlers
         private void OnTimerElapsedEvent(object sender, ElapsedEventArgs e)
         {
             lock (this.timerMutex)
@@ -364,9 +357,7 @@ namespace Digimezzo.Utilities.Settings
                 }
             }
         }
-        #endregion
 
-        #region Static
         public static string ApplicationFolder()
         {
             return SettingsClient.Instance.applicationFolder;
@@ -401,10 +392,7 @@ namespace Digimezzo.Utilities.Settings
         {
             return e.SettingNamespace.Equals(settingNamespace) && e.SettingName.Equals(settingName);
         }
-        #endregion
 
-        #region Events
         public static event SettingChangedEventHandler SettingChanged = delegate { };
-        #endregion
     }
 }

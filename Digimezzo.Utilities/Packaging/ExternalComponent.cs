@@ -2,14 +2,11 @@
 {
     public class ExternalComponent
     {
-        #region Variables
         private string name;
         private string description;
         private string url;
         private string licenseUrl;
-        #endregion
 
-        #region Properties
         public string Name
         {
             get { return name; }
@@ -33,6 +30,5 @@
             get { return licenseUrl; }
             set { licenseUrl = value; }
         }
-        #endregion
     }
 }

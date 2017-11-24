@@ -4,7 +4,6 @@ namespace Digimezzo.Utilities.Packaging
 {
     public class Package
     {
-        #region Properties
         private string name { get; set; }
         private Version version { get; set; }
 
@@ -107,21 +106,16 @@ namespace Digimezzo.Utilities.Packaging
                 return ".update";
             }
         }
-        #endregion
 
-        #region Construction
         public Package(string name, Version version)
         {
             this.name = name;
             this.version = version;
         }
-        #endregion
 
-        #region Public
         public bool IsOlder(Package referencePackage)
         {
             return this.version < referencePackage.version;
         }
-        #endregion
     }
 }

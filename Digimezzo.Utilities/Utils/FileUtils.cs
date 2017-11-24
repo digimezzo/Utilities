@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Digimezzo.Utilities.Exceptions;
+using Digimezzo.Utilities.Win32;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Digimezzo.Utilities.Expection;
-using Digimezzo.Utilities.Win32;
 
 namespace Digimezzo.Utilities.Utils
 {
@@ -101,8 +101,8 @@ namespace Digimezzo.Utilities.Utils
             {
                 case SHFileOperationReturnCode.SUCCESSFUL: return true;
                 case SHFileOperationReturnCode.ERROR_SHARING_VIOLATION:
-                    throw new FileInUsingExpection(path);
-                case SHFileOperationReturnCode.DE_ERROR_MAX: throw new MaxPathExpection(path);
+                    throw new FileInUsingException(path);
+                case SHFileOperationReturnCode.DE_ERROR_MAX: throw new MaxPathException(path);
                 case SHFileOperationReturnCode.ERRORONDEST:
                     throw new IOException("An unspecified error occurred on the destination.");
                 default: throw new NotImplementedException("Not supported SHFileOperation return code: " + returnCode);

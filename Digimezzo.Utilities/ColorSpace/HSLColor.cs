@@ -5,7 +5,6 @@ namespace Digimezzo.Utilities.ColorSpace
 {
     public class HSLColor
     {
-        #region Property
         private double hue;
         private double saturation;
         private double luminosity;
@@ -55,9 +54,7 @@ namespace Digimezzo.Utilities.ColorSpace
                     luminosity = value / 100d;
             }
         }
-        #endregion
-
-        #region Constructor
+    
         public HSLColor(int H, int S, int L)
         {
             this.Hue = H;
@@ -71,9 +68,7 @@ namespace Digimezzo.Utilities.ColorSpace
             this.saturation = s;
             this.luminosity = l;
         }
-        #endregion
-
-        #region Public
+     
         public Color ToRgb()
         {
             byte r, g, b;
@@ -172,9 +167,7 @@ namespace Digimezzo.Utilities.ColorSpace
 
             return hslColor.ToRgb();
         }
-        #endregion
-
-        #region Private
+      
         private static double ColorCalc(double c, double t1, double t2)
         {
             if (c < 0) c += 1d;
@@ -184,6 +177,5 @@ namespace Digimezzo.Utilities.ColorSpace
             if (3.0d * c < 2.0d) return t1 + (t2 - t1) * (2.0d / 3.0d - c) * 6.0d;
             return t1;
         }
-        #endregion
     }
 }

@@ -29,7 +29,6 @@ namespace Digimezzo.Utilities.Packaging
 
     public class PackageCreator
     {
-        #region Variables
         // Configuration
         private XDocument packagerDoc;
         private Package package;
@@ -45,16 +44,12 @@ namespace Digimezzo.Utilities.Packaging
         // Requires directory structure on the server: <ApplicationName>/.update
         private string publishDirectory = ""; // Filled in during Initialize()
         private string publishUpdateSubDirectory = ".update";
-        #endregion
 
-        #region Construction
         public PackageCreator(string packageName, Version packageVersion)
         {
             this.package = new Package(packageName, packageVersion);
         }
-        #endregion
 
-        #region Public
         public async Task ExecuteAsync()
         {
             // Initialize
@@ -135,9 +130,7 @@ namespace Digimezzo.Utilities.Packaging
 
             Console.ReadKey();
         }
-        #endregion
 
-        #region Private
         private void Initialize()
         {
             this.installablePackageName = this.package.Filename + this.package.InstallableFileExtension;
@@ -465,6 +458,5 @@ namespace Digimezzo.Utilities.Packaging
                 }
             }
         }
-        #endregion
     }
 }

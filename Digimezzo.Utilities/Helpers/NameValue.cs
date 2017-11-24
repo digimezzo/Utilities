@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Digimezzo.Utilities.Helpers
+﻿namespace Digimezzo.Utilities.Helpers
 {
     public class NameValue
     {
-        #region Variables
         private string name;
         private int value;
-        #endregion
 
-        #region Properties
         public string Name
         {
             get { return this.name; }
@@ -25,9 +16,7 @@ namespace Digimezzo.Utilities.Helpers
             get { return this.value; }
             set { this.value = value; }
         }
-        #endregion
-
-        #region Overrides
+   
         public override string ToString()
         {
             return this.Name.ToString();
@@ -47,6 +36,5 @@ namespace Digimezzo.Utilities.Helpers
         {
             return this.Value.GetHashCode();
         }
-        #endregion
     }
 }

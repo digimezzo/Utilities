@@ -12,7 +12,6 @@ namespace Digimezzo.Utilities.Log
 {
     public class LogClient
     {
-        #region Variables
         private string logfile;
         private string logfolder;
         private static LogClient instance;
@@ -22,9 +21,7 @@ namespace Digimezzo.Utilities.Log
         private bool isInitialized;
         private int archiveAboveSize = 5242880; // 5 MB
         private int maxArchiveFiles = 3;
-        #endregion
 
-        #region Construction
         private LogClient()
         {
             this.logfolder = Path.Combine(SettingsClient.ApplicationFolder(), "Log");
@@ -59,9 +56,7 @@ namespace Digimezzo.Utilities.Log
                 return instance;
             }
         }
-        #endregion
 
-        #region Private
         private void AddLogEntry(LogLevel level, string message, object[] args, string callerFilePath, string callerMemberName, int lineNumber)
         {
             this.logTimer.Stop();
@@ -179,9 +174,7 @@ namespace Digimezzo.Utilities.Log
                 files = di.GetFiles().OrderBy(p => p.CreationTime).ToArray();
             }
         }
-        #endregion
 
-        #region Static
         public static void Initialize(int archiveAboveSize, int maxArchiveFiles)
         {
             if (LogClient.Instance.isInitialized) return;
@@ -217,27 +210,20 @@ namespace Digimezzo.Utilities.Log
 
             return sb.ToString();
         }
-        #endregion
 
-        #region Info
         public static void Info(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0)
         {
             LogClient.Instance.AddLogEntry(LogLevel.Info, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName, lineNumber);
         }
-        #endregion
 
-        #region Warning
         public static void Warning(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0)
         {
             LogClient.Instance.AddLogEntry(LogLevel.Warning, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName, lineNumber);
         }
-        #endregion
 
-        #region Error
         public static void Error(string message, object arg1 = null, object arg2 = null, object arg3 = null, object arg4 = null, object arg5 = null, object arg6 = null, object arg7 = null, object arg8 = null, [CallerFilePath] string sourceFilePath = "", [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = 0)
         {
             LogClient.Instance.AddLogEntry(LogLevel.Error, message, new object[] { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }, sourceFilePath, memberName, lineNumber);
         }
-        #endregion
     }
 }

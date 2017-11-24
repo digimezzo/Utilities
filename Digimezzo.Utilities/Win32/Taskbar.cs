@@ -9,11 +9,8 @@ namespace Digimezzo.Utilities.Win32
     /// </summary>
     public class Taskbar
     {
-        #region Variables
         private const string ClassName = "Shell_TrayWnd";
-        #endregion
 
-        #region Properties
         public Rectangle Bounds
         {
             get;
@@ -53,9 +50,7 @@ namespace Digimezzo.Utilities.Win32
             get;
             private set;
         }
-        #endregion
 
-        #region Construction
         public Taskbar()
         {
             IntPtr taskbarHandle = NativeMethods.FindWindow(Taskbar.ClassName, null);
@@ -76,6 +71,5 @@ namespace Digimezzo.Utilities.Win32
             this.AlwaysOnTop = (state & ABS.AlwaysOnTop) == ABS.AlwaysOnTop;
             this.AutoHide = (state & ABS.Autohide) == ABS.Autohide;
         }
-        #endregion
     }
 }

@@ -8,23 +8,15 @@ namespace Digimezzo.Utilities.Helpers
 {
     public class OperationResult
     {
-        #region Variabels
         private List<string> messages;
-        #endregion
-
-        #region Properties
+    
         public bool Result { get; set; }
-        #endregion
-
-        #region Construction
 
         public OperationResult()
         {
             this.messages = new List<string>();
         }
-        #endregion
-
-        #region Public
+   
         public void AddMessage(string iMessage)
         {
             this.messages.Add(iMessage);
@@ -54,6 +46,5 @@ namespace Digimezzo.Utilities.Helpers
 
             return sb.ToString();
         }
-        #endregion
     }
 }

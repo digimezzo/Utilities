@@ -1,4 +1,4 @@
-# Utilities
+# Utilities (deprecated by Foundation project)
 Utilities used in all Digimezzo applications
 
 [![Release](https://img.shields.io/github/release/digimezzo/Utilities.svg?style=flat-square)](https://github.com/digimezzo/Utilities/releases/latest)

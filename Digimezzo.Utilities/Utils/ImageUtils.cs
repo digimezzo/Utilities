@@ -277,23 +277,26 @@ namespace Digimezzo.Utilities.Utils
             return System.Windows.Media.Color.FromRgb(color.R, color.G, color.B); ;
         }
 
-        public static byte[] ResizeImageInByteArray(byte[] byteImageIn, int width, int height)
+        public static byte[] ResizeImageInByteArray(byte[] inputImage, int width, int height)
         {
-            byte[] currentByteImageArray = byteImageIn;
+            byte[] outputImage = null;
 
-            MemoryStream inputMemoryStream = new MemoryStream(byteImageIn);
-            Image fullsizeImage = Image.FromStream(inputMemoryStream);
+            if (inputImage != null)
+            {
+                MemoryStream inputMemoryStream = new MemoryStream(inputImage);
+                Image fullsizeImage = Image.FromStream(inputMemoryStream);
 
-            Bitmap fullSizeBitmap = new Bitmap(fullsizeImage, new Size(width, height));
-            MemoryStream resultStream = new MemoryStream();
+                Bitmap fullSizeBitmap = new Bitmap(fullsizeImage, new Size(width, height));
+                MemoryStream resultStream = new MemoryStream();
 
-            fullSizeBitmap.Save(resultStream, fullsizeImage.RawFormat);
+                fullSizeBitmap.Save(resultStream, fullsizeImage.RawFormat);
 
-            currentByteImageArray = resultStream.ToArray();
-            resultStream.Dispose();
-            resultStream.Close();
+                outputImage = resultStream.ToArray();
+                resultStream.Dispose();
+                resultStream.Close();
+            }
 
-            return currentByteImageArray;
+            return outputImage;
         }
     }
 }

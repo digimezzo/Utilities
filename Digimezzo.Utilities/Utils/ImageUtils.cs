@@ -102,7 +102,7 @@ namespace Digimezzo.Utilities.Utils
             return byteArray;
         }
 
-        public static void Image2File(Image img, ImageCodecInfo codec, string filename,int width, int height,
+        public static void Image2File(Image img, ImageCodecInfo codec, string filename, int width, int height,
             long qualityPercent)
         {
             var encoderParams = new EncoderParameters
@@ -275,6 +275,25 @@ namespace Digimezzo.Utilities.Utils
             System.Drawing.Color color = newBitmap.GetPixel(0, 0);
 
             return System.Windows.Media.Color.FromRgb(color.R, color.G, color.B); ;
+        }
+
+        public static byte[] ResizeImageInByteArray(byte[] byteImageIn, int width, int height)
+        {
+            byte[] currentByteImageArray = byteImageIn;
+
+            MemoryStream inputMemoryStream = new MemoryStream(byteImageIn);
+            Image fullsizeImage = Image.FromStream(inputMemoryStream);
+
+            Bitmap fullSizeBitmap = new Bitmap(fullsizeImage, new Size(width, height));
+            MemoryStream resultStream = new MemoryStream();
+
+            fullSizeBitmap.Save(resultStream, fullsizeImage.RawFormat);
+
+            currentByteImageArray = resultStream.ToArray();
+            resultStream.Dispose();
+            resultStream.Close();
+
+            return currentByteImageArray;
         }
     }
 }

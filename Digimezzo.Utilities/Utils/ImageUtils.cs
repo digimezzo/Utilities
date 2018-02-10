@@ -74,20 +74,28 @@ namespace Digimezzo.Utilities.Utils
             return newBitmap;
         }
 
-        public static byte[] Image2ByteArray(string filename)
+        public static byte[] Image2ByteArray(string filename, int width, int height)
         {
             byte[] byteArray = null;
 
             try
             {
                 if (string.IsNullOrEmpty(filename))
+                {
                     return null;
-
+                }
+                    
                 Bitmap bmp = default(Bitmap);
 
                 using (Bitmap tempBmp = new Bitmap(filename))
                 {
                     bmp = new Bitmap(tempBmp);
+
+                    if (width > 0 && height > 0)
+                    {
+                        Bitmap scaledBmp = new Bitmap(bmp, new Size(width, height));
+                        bmp = scaledBmp;
+                    }
                 }
 
                 ImageConverter converter = new ImageConverter();
@@ -102,8 +110,7 @@ namespace Digimezzo.Utilities.Utils
             return byteArray;
         }
 
-        public static void Image2File(Image img, ImageCodecInfo codec, string filename, int width, int height,
-            long qualityPercent)
+        public static void Image2File(Image img, ImageCodecInfo codec, string filename, int width, int height, long qualityPercent)
         {
             var encoderParams = new EncoderParameters
             {
